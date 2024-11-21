@@ -28,15 +28,13 @@ public class Tablero {
         numJugadas++;
     }
 
-    public boolean completo() {
-        return numJugadas==MAX_JUGADAS;
-    }
+    public boolean completo() {return numJugadas==MAX_JUGADAS;}
 
     public void visualizar() {
-        for (int i=0;i<numJugadas;i++){
+        for (int i=0;i<this.getNumJugadas();i++){
             System.out.println("Jugada " + (i+1) + "\t");
-            jugadas[i].visualizar();
-            pistas[i].visualizar();
+            this.getJugadas()[i].visualizar();
+            this.getResultados()[i].visualizar();
             System.out.println();
         }
     }

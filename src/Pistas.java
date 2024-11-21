@@ -29,6 +29,6 @@ public class Pistas {
 
     @Override
     public String toString() {
-        return aciertos + " " + descolocados;
+        return this.getAciertos() + " " + descolocados;
     }
 }

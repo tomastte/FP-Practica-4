@@ -40,27 +40,36 @@ public class Jugada {
         }
     }
 
-    // Comprobar si la jugada corresponde (this) a la jugada oculta
-    // Ofrece las pistas
     public Pistas comprobar(Jugada oculta) {
         Pistas pista;
         boolean[] utilizados=new boolean[fichas.length];
-        boolean[] aciertados =new boolean[fichas.length];
+        boolean[] acertados=new boolean[fichas.length];
         String jugadaOculta = oculta.toString();
         String jugada = this.toString();
+        boolean flag;
         int aciertos=0;
         int descolocados=0;
 
         for (int i=0;i<jugada.length();i++) {
             if (jugada.charAt(i)==jugadaOculta.charAt(i)) {
-                descolocados++;
+                aciertos++;
+                acertados[i]=true;
                 utilizados[i]=true;
             }
         }
-        for (int j=0;j<jugada.length();j++) {
-            if (jugada.charAt(j)==jugadaOculta.charAt(j)) {
-                aciertos++;
-                aciertados[j]=true;
+
+        for (int i=0;i<jugada.length();i++) {
+            if (!acertados[i]){
+                flag=true;
+                int j=0;
+                while (flag && j<jugada.length()){
+                    if (jugada.charAt(i)==jugadaOculta.charAt(j) && !utilizados[j]){
+                        utilizados[j]=true;
+                        descolocados++;
+                        flag=false;
+                    }
+                    j++;
+                }
             }
         }
         pista = new Pistas(aciertos, descolocados);

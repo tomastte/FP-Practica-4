@@ -1,3 +1,5 @@
+import java.io.*;
+
 public class MasterMind {
     private Tablero tablero;
     private Jugada jugadaOculta;
@@ -9,13 +11,46 @@ public class MasterMind {
         this.jugadaOculta=new Jugada(numFichas);
     }
 
-    public MasterMind(String nombreArchivo) {}
+    public MasterMind(String nombreArchivo) {
+        String jugadaOculta;
+        int numFichas;
+        BufferedReader entrada = null;
+        this.tablero=new Tablero();
+        try {
+            entrada = new BufferedReader(new FileReader(nombreArchivo + ".txt"));
+            jugadaOculta=entrada.readLine();
+            this.jugadaOculta=new Jugada(jugadaOculta);
+            numFichas=jugadaOculta.length();
+            this.numFichas=numFichas;
+        } catch (FileNotFoundException ex) {
+            System.out.println("NO EXISTE EL FICHERO");
+        } catch (IOException ex){
+            System.out.println("ERROR AL RECUPERAR LA PARTIDA");
+        } finally {
+            try {
+                if (entrada != null) { entrada.close();}
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
 
     public Tablero getTablero() {
         return tablero;
     }
 
-    private void guardarPartida(String nombreArchivo) {}
+    private void guardarPartida(String nombreArchivo) {
+        PrintWriter file=null;
+        try {
+            file = new PrintWriter(nombreArchivo + ".txt");
+            file.print(jugadaOculta.toString());
+            file.println(this.getTablero());
+        } catch (IOException ex) {
+            System.out.println("ERROR AL GUARDAR LA PARTIDA");
+        } finally {
+            if (file!=null) {file.close();}
+        }
+    }
 
     public void jugar() {
         boolean acierto=false, guardar=false, intento_fallado=false;
@@ -36,6 +71,9 @@ public class MasterMind {
             } else {
                 Jugada jugada = new Jugada(cadena);
                 Pistas pistas = jugada.comprobar(jugadaOculta);
+
+                System.out.print("Jugada " + tablero.getNumJugadas() + "\t");
+                jugada.visualizar();
                 pistas.visualizar();
             }
         } while (!acierto && !guardar && !intento_fallado);
