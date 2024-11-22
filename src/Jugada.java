@@ -8,6 +8,7 @@ public class Jugada {
     private static final String ANSI_YELLOW = "\u001B[33m";
     private static final String ANSI_PURPLE = "\u001B[35m";
     private static final String ANSI_BLACK = "\u001B[30m";
+    private static final String COLOR_DEFECTO = "\u001B[0m";
     private static final char CUADRADO = '\u25A0';
 
     private Color[] fichas;
@@ -93,7 +94,7 @@ public class Jugada {
                     break;
             }
         }
-        System.out.print(ANSI_BLACK);
+        System.out.print(COLOR_DEFECTO);
     }
 
     public String toString() {

@@ -1,3 +1,9 @@
+/*
+Author: Tomás
+Apellidos: Juárez Gelardo
+Matricula: bv0374
+ */
+
 import java.io.*;
 
 public class MasterMind {
@@ -13,15 +19,25 @@ public class MasterMind {
 
     public MasterMind(String nombreArchivo) {
         String jugadaOculta;
-        int numFichas;
+        Jugada jugada;
+        Pistas pistas;
+        String[] aux;
+        String linea;
+
         BufferedReader entrada = null;
         this.tablero=new Tablero();
         try {
             entrada = new BufferedReader(new FileReader(nombreArchivo + ".txt"));
             jugadaOculta=entrada.readLine();
             this.jugadaOculta=new Jugada(jugadaOculta);
-            numFichas=jugadaOculta.length();
-            this.numFichas=numFichas;
+            this.numFichas=jugadaOculta.length();
+            while ((linea=entrada.readLine())!=null){
+                aux=linea.split(" ");
+                jugada=new Jugada(aux[0]);
+                pistas=new Pistas(Integer.parseInt(aux[1]),Integer.parseInt(aux[2]));
+                getTablero().insertar(jugada,pistas);
+            }
+
         } catch (FileNotFoundException ex) {
             System.out.println("NO EXISTE EL FICHERO");
         } catch (IOException ex){
@@ -40,23 +56,20 @@ public class MasterMind {
     }
 
     private void guardarPartida(String nombreArchivo) {
-        PrintWriter file=null;
-        try {
-            file = new PrintWriter(nombreArchivo + ".txt");
-            file.print(jugadaOculta.toString());
-            file.println(this.getTablero());
+        try (PrintWriter file = new PrintWriter(nombreArchivo + ".txt")) {
+            file.println(jugadaOculta.toString());
+            for (int i=0;i<getTablero().getNumJugadas();i++) {
+                Jugada jugadaActual=getTablero().getJugadas()[i];
+                Pistas pistaActual=getTablero().getResultados()[i];
+                file.println(jugadaActual.toString() + " " + pistaActual.toString());
+            }
         } catch (IOException ex) {
             System.out.println("ERROR AL GUARDAR LA PARTIDA");
-        } finally {
-            if (file!=null) {file.close();}
         }
     }
 
     public void jugar() {
         boolean acierto=false, guardar=false, intento_fallado=false;
-        // Eliminar 2 lineas
-        String cadenaOculta=jugadaOculta.toString();
-        System.out.println(cadenaOculta);
         do {
             String cadena=Teclado.leerJugadaGuardar(numFichas, "Intruduce jugada o G (guardar la partida).\nR (Rojo), V (Verde), A (Amarillo), P (purpura): ");
             if (cadena.equals("G")){
@@ -71,7 +84,7 @@ public class MasterMind {
             } else {
                 Jugada jugada = new Jugada(cadena);
                 Pistas pistas = jugada.comprobar(jugadaOculta);
-
+                tablero.insertar(jugada,pistas);
                 System.out.print("Jugada " + tablero.getNumJugadas() + "\t");
                 jugada.visualizar();
                 pistas.visualizar();
