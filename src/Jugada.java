@@ -7,13 +7,15 @@ public class Jugada {
     private static final String ANSI_GREEN = "\u001B[32m";
     private static final String ANSI_YELLOW = "\u001B[33m";
     private static final String ANSI_PURPLE = "\u001B[35m";
-    private static final String ANSI_BLACK = "\u001B[30m";
+    private static final String ANSI_BLACK = "\u001B[30m"; // Tiene un error y no cierra el color
     private static final String COLOR_DEFECTO = "\u001B[0m";
     private static final char CUADRADO = '\u25A0';
 
     private Color[] fichas;
 
+    // Constructor de la jugada del usuario
     public Jugada(String cadena) {
+        // A cada caracter del string le asignamos un color
         fichas=new Color[cadena.length()];
         for (int i=0;i<cadena.length();i++){
             switch (cadena.charAt(i)){
@@ -33,6 +35,7 @@ public class Jugada {
         }
     }
 
+    // Constructor de la jugada oculta
     public Jugada(int numFichas) {
         fichas = new Color[numFichas];
         for (int i=0; i<fichas.length; i++){
@@ -41,6 +44,7 @@ public class Jugada {
         }
     }
 
+    // Comprueba la jugada con la jugada oculta y da las pistas correspondientes
     public Pistas comprobar(Jugada oculta) {
         Pistas pista;
         boolean[] utilizados=new boolean[fichas.length];
@@ -94,9 +98,10 @@ public class Jugada {
                     break;
             }
         }
-        System.out.print(COLOR_DEFECTO);
+        System.out.print(COLOR_DEFECTO); // Cierra el color
     }
 
+    // Convert cada elemento del array fichas to String
     public String toString() {
         String resultado = "";
         for (Color ficha : fichas) {

@@ -26,14 +26,16 @@ public class MasterMind {
         this.tablero=new Tablero(); // Tablero vacio
         try {
             entrada = new BufferedReader(new FileReader(nombreArchivo + ".txt"));
-            jugadaOculta=entrada.readLine();
-            this.jugadaOculta=new Jugada(jugadaOculta);
-            this.numFichas=jugadaOculta.length();
+            jugadaOculta=entrada.readLine(); // Primera linea del fichero es la jugada oculta
+            this.jugadaOculta=new Jugada(jugadaOculta); // le pasamos la jugada oculta como un string
+            this.numFichas=jugadaOculta.length(); // numero de fichas de la partida actual
+            // Leer campo a campo el fichero para asignarle un valor
             while ((linea=entrada.readLine())!=null){
                 aux=linea.split(" ");
-                jugada=new Jugada(aux[0]);
-                pistas=new Pistas(Integer.parseInt(aux[1]),Integer.parseInt(aux[2]));
-                getTablero().insertar(jugada,pistas);
+                jugada=new Jugada(aux[0]); // Jugada del usuario
+                // aux[1]=aciertos y aux[2]=descolocados
+                pistas=new Pistas(Integer.parseInt(aux[1]),Integer.parseInt(aux[2])); // Convert String to Int
+                getTablero().insertar(jugada,pistas); // Inserta en el tablero la jugada y la pista correspondiente
             }
         } catch (FileNotFoundException ex) {
             System.out.println("NO EXISTE EL FICHERO");
